@@ -9,3 +9,9 @@
 *.rds
 *.csv
 *.tsv
+*.gz
+*.txt
+*.tar
+*.gmt
+*.h5
+*.Robj
