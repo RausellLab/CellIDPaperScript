@@ -1,0 +1,8 @@
+setwd("/data-tmp/Akira_tmp/final/CellIDPaperScript/Atlas")
+source("R/utilitary_function.R")
+source("R/0_data_processing.R")
+source("R/1_label_transfer.R")
+source("R/2_mapping.R")
+source("R/Fig12.R")
+source("R/Fig13.R")
+source("R/Fig14.R")
