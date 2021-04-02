@@ -6,7 +6,7 @@ This is the repository to reproduce the figures for Cell-ID manuscript. To downl
 
 * Supplementary figure 1 and 2
 
-### SupNote3 Capacity of Cell*ID to identify well-established cell types on the basis of reference marker lists.
+### SupNote3 Capacity of Cell-ID to identify well-established cell types on the basis of reference marker lists.
 
 * Main Figure 2
 * Supplementary figure 3, 4, 5
