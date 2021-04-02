@@ -1,19 +1,19 @@
 # SupFig5A ----------------------------------------------------------------
 
-ImmuneBenchOverall <- ImmuneBenchOverall %>%  group_by(data, metrics) %>%  mutate(colorMacro = max(macro) == macro, colorSD = min(sd) == sd)
+ImmuneBenchOverall <- ImmuneBenchOverall %>%  group_by(data, metrics) %>%  mutate(colorvalue = max(value) == value, colorsd = min(`standard deviation`) == `standard deviation`)
 ImmuneBenchCell$metrics <- factor(ImmuneBenchCell$metrics, levels = c("Precision", "Recall", "F1"))
 ImmuneBenchOverall$metrics <- factor(ImmuneBenchOverall$metrics, levels = c("Precision", "Recall", "F1"))
 
 SupFig5A <- ggboxplot(
-  ImmuneBenchCell %>%  filter(data == "CITE"),
+  ImmuneBenchCell %>%  filter(data == "CITE") %>%  filter(!methods %in% c("Naive", "CellID_AUC")),
   x = "methods",
   y = "value",
   width = 0.5, 
   facet.by = "metrics",
   outlier.shape = NA,
 ) + geom_jitter(aes(fill = cell_type), shape = 21, size = 4, width = 0.2) + 
-  geom_text(data = ImmuneBenchOverall %>%  filter(data == "CITE"), aes(x = methods, y= 1.12, label = round(macro, digits = 2), color = colorMacro), fontface = "bold", size = 3) + 
-  geom_text(data = ImmuneBenchOverall %>%  filter(data == "CITE"), aes(x = methods, y= 1.06, label = round(sd, digits = 2), color = colorSD),  fontface = "bold", size = 3) + 
+  geom_text(data = ImmuneBenchOverall %>%  filter(data == "CITE"), aes(x = methods, y= 1.12, label = round(value, digits = 2), color = colorvalue), fontface = "bold", size = 3) + 
+  geom_text(data = ImmuneBenchOverall %>%  filter(data == "CITE"), aes(x = methods, y= 1.06, label = round(`standard deviation`, digits = 2), color = colorsd),  fontface = "bold", size = 3) + 
   theme(
     legend.text = element_text(size = 12, face = "bold"),
     legend.title = element_blank(),
@@ -33,8 +33,8 @@ SupFig5B <- ggboxplot(
   facet.by = "metrics",
   outlier.shape = NA
 ) + geom_jitter(aes(fill = cell_type), shape = 21, size = 4, width = 0.2) + 
-  geom_text(data = ImmuneBenchOverall %>%  filter(data == "REAP"), aes(x = methods, y= 1.12, label = round(macro, digits = 2), color = colorMacro), fontface = "bold", size = 3) + 
-  geom_text(data = ImmuneBenchOverall %>%  filter(data == "REAP"), aes(x = methods, y= 1.06, label = round(sd, digits = 2), color = colorSD),  fontface = "bold", size = 3) + 
+  geom_text(data = ImmuneBenchOverall %>%  filter(data == "REAP"), aes(x = methods, y= 1.12, label = round(value, digits = 2), color = colorvalue), fontface = "bold", size = 3) + 
+  geom_text(data = ImmuneBenchOverall %>%  filter(data == "REAP"), aes(x = methods, y= 1.06, label = round(sd, digits = 2), color = colorsd),  fontface = "bold", size = 3) + 
   theme(
     legend.text = element_text(size = 12, face = "bold"),
     legend.title = element_blank(),

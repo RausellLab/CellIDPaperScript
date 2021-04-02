@@ -1,8 +1,10 @@
 library(Seurat)
 library(CellID)
+library(data.table)
 library(tidyverse)
 library(SingleCellExperiment)
 
+set.seed(1)
 # Cite Seq ----------------------------------------------------------------
 cbmc.rna <- as.sparse(read.csv(file = "data/cite_seq/cite_seq.csv.gz", sep = ",", header = TRUE, row.names = 1))
 cbmc.rna <- CollapseSpeciesExpressionMatrix(cbmc.rna)
@@ -71,4 +73,4 @@ reap_seurat <- ScaleData(reap_seurat, assay = "ADT")
 reap_seurat <- RunMCA(reap_seurat, nmcs = 50)
 reap_seurat$cell_type1 <- reap_seurat@active.ident
 reap_seurat$cell_type1 <- factor(reap_seurat$cell_type1, levels = c("Mk", "B", "CD4 T", "CD8 T", "NK",  "CD14 Mono", "CD16 Mono", "DC", "pDC", "unknown"))
-write_rds(reap_seurat,"data/reap_seurat.rds")
+write_rds(reap_seurat,"data/reap_seq/reap_seurat.rds")

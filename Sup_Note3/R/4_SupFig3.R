@@ -38,7 +38,7 @@ SupFig3C <-
     slot = "data",
     assay = "ImSig",
     raster = T,
-    group.by = "cell_type1" ,
+    group.by = "cell_type1",
     group.colors = citeCol,
     disp.max = 10,
     size = 3.5,lines.width = 110
