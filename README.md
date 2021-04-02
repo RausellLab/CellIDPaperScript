@@ -27,8 +27,9 @@ single-cell omics technologies: scRNAseq and scATACseq
 
 * Supplementary Figure 10, 11, 12
 
-### Supplementary Note 7. Influence of the cell heterogeneity background in the assessment of Cell-ID gene
-signatures and its impact in label transferring performance across independent datasets.
+### Supplementary Note 7. Influence of the cell heterogeneity background in the assessment of Cell-ID gene signatures and its impact in label transferring performance across independent datasets.
+
+* Supplementary Table 12
 
 ### Supplementary Note 8. Computational details, timing and memory consumption
 
