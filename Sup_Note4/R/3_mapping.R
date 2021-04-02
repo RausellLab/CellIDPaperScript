@@ -41,10 +41,12 @@ write.xlsx(x = data.frame(Segerstolpe = names(map_baron_segerstolpe), Baron  = a
 PancreasBenchCell <- foreach(Seurat = SeuratPancreas[2:3], mapping = list(map_baron_muraro, map_baron_segerstolpe), data = c("Muraro", "Segerstolpe"), .combine = rbind) %:% foreach(predictions = pred_func_name, .combine = rbind) %do% {
     TruthDF <- tibble(Author = as.vector(Seurat$cell_type1), Predictions = as.vector(unlist(Seurat[[predictions]])), map_label = as.vector(sapply(mapping[Seurat$cell_type1], function(x) paste0(x, collapse =", " ))))
     TruthDF <- TruthDF %>% filter(map_label != "removed")
+    Unassigned1 <- sum(TruthDF$Predictions == "unassigned")/length(TruthDF$Predictions)
     TruthDF <- TruthDF %>% mutate(positive = mapply(x = .$map_label, y = .$Predictions, FUN =function(x,y){x %like% y}))
     TruthDF <- TruthDF %>% mutate(final_map = ifelse(positive, Author, Predictions))
     PredDF <- sapply(unique(TruthDF$Author), function(x, truth){
         TruthDFpos <- TruthDF %>% filter(Author == x)
+        Unassigned2 <- sum(TruthDFpos$Predictions == "unassigned")/length(TruthDFpos$Predictions)
         TruthDFneg <- TruthDF %>% filter(Author != x)
         TP <- sum(TruthDFpos$Author == TruthDFpos$final_map)
         FN <- sum(TruthDFpos$Author != TruthDFpos$final_map)
@@ -52,18 +54,26 @@ PancreasBenchCell <- foreach(Seurat = SeuratPancreas[2:3], mapping = list(map_ba
         Recall <- TP/ (TP + FN)
         Precision <- TP/ (FP + TP)
         F1 <- 2*(Recall*Precision)/(Recall + Precision) 
-        return(c(Precision = Precision, Recall = Recall, F1 = F1))
+        return(c(Precision = Precision, Recall = Recall, F1 = F1, Unassigned1 = Unassigned1, Unassigned2 = Unassigned2))
     },
     truth = TruthDF
     ) %>% as.data.frame() %>%  rownames_to_column(var = "metrics") %>%  gather("cell_type", "value", -1) %>%  mutate(methods = predictions) %>%  mutate(data = data) %>%  mutate(value = ifelse(is.na(value), 0, value))
-} %>% select(data, methods, cell_type, everything()) %>%  mutate(methods = str_remove(methods, "pred_")) %>% mutate(methods = str_replace(methods, "CellID_G", "CellID(G)")) %>% mutate(methods = str_replace(methods, "CellID_C", "CellID(C)"))
+} %>% select(data, methods, cell_type, everything()) %>%  mutate(methods = str_remove(methods, "pred_")) %>% mutate(methods = str_replace(methods, "CellID_G", "CellID(G)")) %>% mutate(methods = str_replace(methods, "CellID_C", "CellID(C)"), value = round(value, digits =3))
 PancreasBenchOverall <- PancreasBenchCell  %>%  group_by(methods, data, metrics) %>%  summarise(value = mean(value)) %>%  select(data, everything())
+
+PancreasBenchOverall <- PancreasBenchCell %>%  
+    filter(metrics != "Unassigned2") %>%  
+    mutate(metrics = ifelse(metrics == "Unassigned1", "Unassigned", metrics))  %>%  
+    group_by(methods, data, metrics) %>%  
+    summarise(value = mean(value)) %>%  
+    select(data, everything())
+
+PancreasBenchCell <- PancreasBenchCell %>%  
+    filter(metrics != "Unassigned1") %>%  
+    mutate(metrics = ifelse(metrics == "Unassigned2", "Unassigned", metrics))
 
 write_rds(PancreasBenchCell, path = "data/PancreasBenchCell.rds")
 write_rds(PancreasBenchOverall, path = "data/PancreasBenchOverall.rds")
-
-xlsx::write.xlsx(x = as.data.frame(spread(data = mutate(PancreasBenchCell, value = round(value, digits =3)), key = methods, value = value)), file = "../FinalTable/SupTable5.xlsx", sheetName = "Cell_Population_Pancreas", append = F)
-xlsx::write.xlsx(x = as.data.frame(spread(data = mutate(PancreasBenchOverall, value = round(value, digits =3)), key = methods, value = value)), file = "../FinalTable/SupTable5.xlsx", sheetName = "Overall_Pancreas", append = T)
 
 # Epithelial --------------------------------------------------------------
 
@@ -96,10 +106,12 @@ write.xlsx(x = data.frame(`Montoro` = names(map_plas_mon), `Plasschaert Mouse`  
 EpithelialBenchCell <- foreach(Seurat = SeuratEpithelial[2:3], mapping = list(map_plas_plas, map_plas_mon), data = c("Plasschaert Human", "Montoro"), .combine = rbind) %:% foreach(predictions = pred_func_name, .combine = rbind) %do% {
     TruthDF <- tibble(Author = as.vector(Seurat$cell_type1), Predictions = as.vector(unlist(Seurat[[predictions]])), map_label = as.vector(sapply(mapping[Seurat$cell_type1], function(x) paste0(x, collapse =", " ))))
     TruthDF <- TruthDF %>% filter(map_label != "removed")
+    Unassigned1 <- sum(TruthDF$Predictions == "unassigned")/length(TruthDF$Predictions)
     TruthDF <- TruthDF %>% mutate(positive = mapply(x = .$map_label, y = .$Predictions, FUN =function(x,y){x %like% y}))
     TruthDF <- TruthDF %>% mutate(final_map = ifelse(positive, Author, Predictions))
     PredDF <- sapply(unique(TruthDF$Author), function(x, truth){
         TruthDFpos <- TruthDF %>% filter(Author == x)
+        Unassigned2 <- sum(TruthDFpos$Predictions == "unassigned")/length(TruthDFpos$Predictions)
         TruthDFneg <- TruthDF %>% filter(Author != x)
         TP <- sum(TruthDFpos$Author == TruthDFpos$final_map)
         FN <- sum(TruthDFpos$Author != TruthDFpos$final_map)
@@ -107,15 +119,22 @@ EpithelialBenchCell <- foreach(Seurat = SeuratEpithelial[2:3], mapping = list(ma
         Recall <- TP/ (TP + FN)
         Precision <- TP/ (FP + TP)
         F1 <- 2*(Recall*Precision)/(Recall + Precision) 
-        return(c(Precision = Precision, Recall = Recall, F1 = F1))
+        return(c(Precision = Precision, Recall = Recall, F1 = F1, Unassigned1 = Unassigned1, Unassigned2 = Unassigned2))
     },
     truth = TruthDF
     ) %>% as.data.frame() %>%  rownames_to_column(var = "metrics") %>%  gather("cell_type", "value", -1) %>%  mutate(methods = predictions) %>%  mutate(data = data) %>%  mutate(value = ifelse(is.na(value), 0, value))
-} %>% select(data, methods, cell_type, everything()) %>% mutate(methods = str_replace(methods, "CellID_G", "CellID(G)")) %>% mutate(methods = str_replace(methods, "CellID_C", "CellID(C)")) %>% mutate(methods = str_remove(methods, "pred_"))
-EpithelialBenchOverall <- EpithelialBenchCell  %>%  group_by(methods, data, metrics) %>%  summarise(value = mean(value)) %>%  select(data, everything())
+} %>% select(data, methods, cell_type, everything()) %>% mutate(methods = str_replace(methods, "CellID_G", "CellID(G)")) %>% mutate(methods = str_replace(methods, "CellID_C", "CellID(C)")) %>% mutate(methods = str_remove(methods, "pred_"), value = round(value, digits =3))
+
+EpithelialBenchOverall <- EpithelialBenchCell %>%  
+    filter(metrics != "Unassigned2") %>%  
+    mutate(metrics = ifelse(metrics == "Unassigned1", "Unassigned", metrics),value = round(value, digits =3))  %>%  
+    group_by(methods, data, metrics) %>%  
+    summarise(value = mean(value)) %>%  
+    select(data, everything())
+
+EpithelialBenchCell <- EpithelialBenchCell %>%  
+    filter(metrics != "Unassigned1") %>%  
+    mutate(metrics = ifelse(metrics == "Unassigned2", "Unassigned", metrics))
 
 write_rds(EpithelialBenchCell, path = "data/EpithelialBenchCell.rds")
 write_rds(EpithelialBenchOverall, path = "data/EpithelialBenchOverall.rds")
-
-xlsx::write.xlsx(x = as.data.frame(spread(data = mutate(EpithelialBenchCell, value = round(value, digits =3)), key = methods, value = value)), file = "../FinalTable/SupTable5.xlsx", sheetName = "Cell_Population_Epithelial", append = T)
-xlsx::write.xlsx(x = as.data.frame(spread(data = mutate(EpithelialBenchOverall, value = round(value, digits =3)), key = methods, value = value)), file = "../FinalTable/SupTable5.xlsx", sheetName = "Overall_Epithelial", append = T)

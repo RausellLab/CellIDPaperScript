@@ -35,11 +35,12 @@ plasschaert_pred <-
 
 
 # benchmark ---------------------------------------------------------------
+
 SeuratEpithelial[[4]] <- AddMetaData(SeuratEpithelial[[4]], plasschaert_pred[, -13] %>% set_rownames(colnames(SeuratEpithelial[[4]])))
 SeuratEpithelial[[4]] <- AddMetaData(SeuratEpithelial[[4]], montoro_pred[, -13] %>% set_rownames(colnames(SeuratEpithelial[[4]])))
 SeuratEpithelial[[4]]$cell_type2 <- ifelse(SeuratEpithelial[[4]]$cell_type1 %in% c("Endocrine", "Goblet", "Brush.Tuft"), SeuratEpithelial[[4]]$cell_type1, "Rejection")
-SeuratIntestinal$cell_type2 <- ifelse(SeuratEpithelial[[4]]$cell_type1 %in% c("Endocrine", "Goblet", "Brush.Tuft"), SeuratEpithelial[[4]]$cell_type1, "Rejection")
-write_rds(x = SeuratEpithelial[[4]], path = "../SupNote4/data/SeuratIntestinal.rds")
+SeuratIntestinal <- SeuratEpithelial[[4]]
+write_rds(x = SeuratIntestinal, path = "../SupNote4/data/SeuratIntestinal.rds")
 
 # mapping -----------------------------------------------------------------
 map_airway_intestinal <-
@@ -58,7 +59,7 @@ MapAirwayIntestinalDF <- tibble(names(map_airway_intestinal), sapply(map_airway_
 xlsx::write.xlsx(x = MapAirwayIntestinalDF, file = "../FinalTable/SupTable10.xlsx", sheetName = "Airway_Intestinal", append = T)
 
 
-Seurat <- read_rds("data/SeuratIntestinal.rds")
+SeuratIntestinal <- read_rds("data/SeuratIntestinal.rds")
 mapping <- map_airway_intestinal
 
 IntestinalBenchCell <- foreach(predictions = pred_func_name, .combine = rbind) %:% foreach(ref = c("__pla", "__mon"), .combine = rbind) %do%
@@ -97,13 +98,14 @@ IntestinalBenchCell <- foreach(predictions = pred_func_name, .combine = rbind) %
   mutate(methods = str_replace(methods, "CellID_C", "CellID(C)"))
 
 FreqDF <- as.data.frame(table(SeuratIntestinal$cell_type2)) %>%  set_colnames(c("cell_type","Freq"))
-IntestinalBenchOverall <- IntestinalBenchCell %>% inner_join(FreqDF) %>% 
+IntestinalBenchOverall <- IntestinalBenchCell %>%  filter(cell_type != "Rejection") %>% inner_join(FreqDF) %>% 
   group_by(methods, data, metrics) %>%
   summarise(value = mean(value)) %>%
   dplyr::select(data, everything()) %>%
   ungroup() %>%
   mutate(methods = factor(methods, c("CellID(G)", "CellID(C)", "scmap_cluster", "scmap_cell", "Seurat", "MNN", "SCN", "scPred", "CHETAH", "CaSTLe", "scID", "SingleR"))) %>%
   mutate(metrics = factor(metrics, c("Precision", "Recall", "F1")))
+
 
 write_rds(IntestinalBenchCell, "data/IntestinalBenchCell.rds")
 write_rds(IntestinalBenchOverall, "data/IntestinalBenchOverall.rds")

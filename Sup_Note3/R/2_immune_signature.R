@@ -25,6 +25,8 @@ getPalette <- colorRampPalette(brewer.pal(11, "Spectral"))
 palCol <- getPalette(11)
 palCol <- setNames(palCol, immune_levels)
 
+DimPlot(cite_seurat, reduction = "mca")
+
 #   ____________________________________________________________________________
 #   CiteSeq                                                                 ####
 

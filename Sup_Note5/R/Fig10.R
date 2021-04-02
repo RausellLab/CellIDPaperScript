@@ -68,31 +68,30 @@ SupFig10BarCol <- RColorBrewer::brewer.pal(name = "Paired", n = 12)
 SupFig10BarCol <- setNames(SupFig10BarCol, c("scmap_cluster", "scmap_cell", "Seurat", "MNN", "CellID(G)", "CellID(C)", "SCN", "scPred", "CHETAH", "CaSTLe", "scID", "SingleR"))
 
 
-SupFig10Bar <-
-  ggbarplot(
-    IntestinalBenchOverall,
-    x = "methods",
-    y = "value",
-    fill = "methods",
-    facet.by = c("metrics", "data"),
-    label = T, lab.nb.digits = 2, 
-    lab.size = 2.5,
-  ) + theme(
-    axis.title = element_blank(),
-    axis.text.x = element_blank(),
-    strip.text.x = element_text(size = 8.2, face = "bold"),
-    strip.text.y = element_text(size = 8.2, face = "bold"),
-    axis.ticks.x = element_blank(),
-    axis.text = element_text(size = 8.2, face = "bold"),
-    legend.text = element_text(size = 8.2, face = "bold"),
-    legend.title = element_blank()
-  ) + scale_fill_manual(values = SupFig10BarCol) + scale_y_continuous(
-    breaks =
-      c(0, 0.25, 0.5, 0.75, 1),
-    limits = c(0, 1.05)
-  ) + geom_vline(xintercept = 2.5) + guides(fill = guide_legend(nrow = 2))
+SupFig10C <- ggbarplot(
+  rbind(IntestinalBenchOverall, df_Rejection),
+  x = "methods",
+  y = "value",
+  fill = "methods",
+  facet.by = c("metrics", "data"),
+  label = T, lab.nb.digits = 2, 
+  lab.size = 2.5, lab.vjust = -0.05
+) + theme(
+  axis.title = element_blank(),
+  axis.text.x = element_blank(),
+  strip.text.x = element_text(size = 7, face = "bold"),
+  strip.text.y = element_text(size = 7, face = "bold"),
+  axis.ticks.x = element_blank(),
+  axis.text = element_text(size = 8.2, face = "bold"),
+  legend.text = element_text(size = 8.2, face = "bold"),
+  legend.title = element_blank()
+) + scale_fill_manual(values = SupFig10BarCol) + scale_y_continuous(
+  breaks =
+    c(0, 0.25, 0.5, 0.75, 1),
+  limits = c(0, 1.08)
+) + geom_vline(xintercept = 2.5) + guides(fill = guide_legend(nrow = 2))
 
-SupFig10 <- (gg_haber_author + gg_haber_predictions) / SupFig10Bar + plot_annotation(tag_levels = "A") 
+SupFig10 <- (gg_haber_author + gg_haber_predictions) / SupFig10C + plot_annotation(tag_levels = "A") 
 
 
 ggsave(
