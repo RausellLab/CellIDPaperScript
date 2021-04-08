@@ -9,13 +9,13 @@ This is the repository to reproduce the figures for Cell-ID manuscript. To downl
 ### SupNote3 Capacity of Cell-ID to identify well-established cell types on the basis of reference marker lists.
 
 * Main Figure 2
-* Supplementary figure 3, 4, 5
+* Supplementary figure 3, 4
 
 ### Supplementary Note 4. Capacity of Cell-ID to match cells of analogous cell types across independent scRNAseq
 datasets from the same tissue of origin, within and across species.
 
 * Main Figure 3 
-* Supplementary figure 6, 7, 8
+* Supplementary figure 5, 6, 7, 8
 
 ### Supplementary Note 5. Capacity of Cell-ID to match cell types across independent scRNA-seq datasets from
 different tissues of origin
