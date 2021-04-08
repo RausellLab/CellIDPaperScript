@@ -5,5 +5,6 @@ Bench1B <- Bench1 %>%  filter(cell_type == "Rejection")%>%  filter(metrics == "R
 Bench1B <- Bench1B[,-(2:3)] %>%  gather("methods", "rejection rate",-1)
 Bench2 <- readRDS("data/IntestinalBenchOverall.rds")%>%  spread(methods, value) %>%  rename(`Reference Data` = data)
 xlsx::write.xlsx(Bench1A, file = "../FinalTable/SupTable5.xlsx", sheetName = "Cell_Population", append = F)
-xlsx::write.xlsx(Bench2, file = "../FinalTable/SupTable5.xlsx", sheetName = "Overall", append = T)
 xlsx::write.xlsx(Bench1B, file = "../FinalTable/SupTable5.xlsx", sheetName = "Rejection", append = T)
+xlsx::write.xlsx(Bench2, file = "../FinalTable/SupTable5.xlsx", sheetName = "Overall", append = T)
+

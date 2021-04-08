@@ -43,14 +43,14 @@ AuthorAirway <- DimPlotMC(Airway, features = c("Chga", "Krt5", "Scgb1a1", "Foxj1
 FPlotAirway  <- FeaturePlot(Airway, features = c("Chga", "Krt5", "Scgb1a1", "Foxj1"), reduction = "mca",combine = F, order =T) 
 FPlotAirway <-  lapply(FPlotAirway, function(x){x + ThemeSupFig16 + scale_color_gradient(low = "lightgrey", high = "red")})
 
-LegSupFig15A <- get_legend(AuthorAirway)
-LegSupFig15B <- get_legend(AuthorPancreas)
-SupFig15A <- AuthorAirway + theme(legend.position = "none")
-SupFig15B <- AuthorPancreas + theme(legend.position = "none")
+LegSupFig14A <- get_legend(AuthorAirway)
+LegSupFig14B <- get_legend(AuthorPancreas)
+SupFig14A <- AuthorAirway + theme(legend.position = "none")
+SupFig14B <- AuthorPancreas + theme(legend.position = "none")
 
 
-SupFig15C <- ggarrange(plotlist = FPlotAirway)
-SupFig15D <- ggarrange(plotlist = FPlotPancreas)
+SupFig14C <- ggarrange(plotlist = FPlotAirway)
+SupFig14D <- ggarrange(plotlist = FPlotPancreas)
 
 
 # Pathways ----------------------------------------------------------------
@@ -84,18 +84,18 @@ Pancreas@assays[["Pathway"]] <- CreateAssayObject(PancreasHGT)
 Airway@assays[["Pathway"]] <- CreateAssayObject(AirwayHGT)
 
 
-D1 <- FeaturePlot(Pancreas, order =T, "vasculogenesis (GO:0001570)", reduction = "mca", max.cutoff = 5, min.cutoff = 2) + ThemeSupFig16 + scale_color_gradient(low = "lightgrey", high = "red")
-D2 <- FeaturePlot(Pancreas, order =T, "Pancreatic secretion", reduction = "mca", max.cutoff = 5, min.cutoff = 2) + ThemeSupFig16 + scale_color_gradient(low = "lightgrey", high = "red")
-D3 <- FeaturePlot(Airway, order =T, "nervous system development (GO:0007399)", reduction = "mca", max.cutoff = 5, min.cutoff = 2) + ThemeSupFig16 + scale_color_gradient(low = "lightgrey", high = "red")
-D4 <- FeaturePlot(Airway, order =T, "cilium movement (GO:0003341)", reduction = "mca", max.cutoff = 5, min.cutoff = 2) + ThemeSupFig16 + scale_color_gradient(low = "lightgrey", high = "red")
+D1 <- FeaturePlot(Pancreas, order = T, "vasculogenesis (GO:0001570)", reduction = "mca", max.cutoff = 5, min.cutoff = 2) + ThemeSupFig16 + scale_color_gradient(low = "lightgrey", high = "red")
+D2 <- FeaturePlot(Pancreas, order = T, "Pancreatic secretion", reduction = "mca", max.cutoff = 5, min.cutoff = 2) + ThemeSupFig16 + scale_color_gradient(low = "lightgrey", high = "red")
+D3 <- FeaturePlot(Airway, order = T, "nervous system development (GO:0007399)", reduction = "mca", max.cutoff = 5, min.cutoff = 2) + ThemeSupFig16 + scale_color_gradient(low = "lightgrey", high = "red")
+D4 <- FeaturePlot(Airway, order = T, "cilium movement (GO:0003341)", reduction = "mca", max.cutoff = 5, min.cutoff = 2) + ThemeSupFig16 + scale_color_gradient(low = "lightgrey", high = "red")
 
 D1$labels$title <- "vasculogenesis"
 D2$labels$title <- "pancreatic secretion"
 D3$labels$title <- "nervous system development"
 D4$labels$title <- "cilium movement"
 
-SupFig15E <- ggarrange(plotlist = list(D1,D2))
-SupFig15F <- ggarrange(plotlist = list(D3,D4))
+SupFig14E <- ggarrange(plotlist = list(D1,D2))
+SupFig14F <- ggarrange(plotlist = list(D3,D4))
 
 
 #  patchwork --------------------------------------------------------------
@@ -106,12 +106,12 @@ AnnotD <- ggplot(mapping = aes(x = 0, y = 0, label = "D")) + geom_text(fontface 
 AnnotE <- ggplot(mapping = aes(x = 0, y = 0, label = "E")) + geom_text(fontface = "bold", size = 6) + theme_void()
 AnnotF <- ggplot(mapping = aes(x = 0, y = 0, label = "F")) + geom_text(fontface = "bold", size = 6) + theme_void()
 design <- c(
-  SupFig15A = area(2, 2, 20, 20),
-  SupFig15B = area(22, 2, 40, 20),
-  SupFig15C = area(2, 22, 20, 40),
-  SupFig15D = area(22, 22, 40, 40),
-  SupFig15E = area(42, 3, 55, 19),
-  SupFig15F = area(42, 23, 55, 39),
+  SupFig14A = area(2, 2, 20, 20),
+  SupFig14B = area(22, 2, 40, 20),
+  SupFig14C = area(2, 22, 20, 40),
+  SupFig14D = area(22, 22, 40, 40),
+  SupFig14E = area(42, 3, 55, 19),
+  SupFig14F = area(42, 23, 55, 39),
   AnnotA = area(1,1,2,2),
   AnnotB = area(1,21,2,22),
   AnnotC = area(21,1,22,2),
@@ -120,7 +120,7 @@ design <- c(
   AnnotF = area(41,21,42,22)
 )
 
-SupFig16 <- SupFig15A + SupFig15B + SupFig15C + SupFig15D + SupFig15E + SupFig15F + AnnotA + AnnotB + AnnotC + AnnotD + AnnotE + AnnotF + plot_layout(design = design)
+SupFig16 <- SupFig14A + SupFig14B + SupFig14C + SupFig14D + SupFig14E + SupFig14F + AnnotA + AnnotB + AnnotC + AnnotD + AnnotE + AnnotF + plot_layout(design = design)
 
-ggsave("../FinalFigure/SupFig16.pdf", plot = SupFig16, units = "mm", width = 180, height = 210, dpi = 600)
-ggsave("../FinalFigure/SupFig16.png", plot = SupFig16, units = "mm", width = 180, height = 210, dpi = 600)
+ggsave("../FinalFigure/SupFig14.pdf", plot = SupFig16, units = "mm", width = 180, height = 210, dpi = 600)
+ggsave("../FinalFigure/SupFig14.png", plot = SupFig16, units = "mm", width = 180, height = 210, dpi = 600)

@@ -85,7 +85,7 @@ colterms <-
   contingency <- (contingency/rowSums(contingency))
   contingency <- contingency[rowterms, colterms]
   colnames(contingency) <- str_remove(colnames(contingency), "cell")
-  SupFig13A <-  ggdraw(pheatmap(contingency,cluster_rows = F,cluster_cols = F,color = rev(heat.colors(101)),angle_col = 45, cellheight = 7, cellwidth = 7, silent = T,fontsize_col = 6.5,fontsize_row = 6.5,legend = F)$gtable)
+  SupFig11A <-  ggdraw(pheatmap(contingency,cluster_rows = F,cluster_cols = F,color = rev(heat.colors(101)),angle_col = 45, cellheight = 7, cellwidth = 7, silent = T,fontsize_col = 6.5,fontsize_row = 6.5,legend = F)$gtable)
   }
 
 { 
@@ -94,7 +94,7 @@ colterms <-
   contingency <- (contingency/rowSums(contingency))
   contingency <- contingency[c(head(rowterms,-8), "Enterocytes"), colterms]
   colnames(contingency) <- str_remove(colnames(contingency), "cell")
-  SupFig13B <-  ggdraw(pheatmap(contingency,cluster_rows = F,cluster_cols = F,color = rev(heat.colors(101)),angle_col = 45,cellheight = 7, cellwidth = 7, silent = T,fontsize_col = 6.5,fontsize_row = 6.5,legend = F)$gtable)
+  SupFig11B <-  ggdraw(pheatmap(contingency,cluster_rows = F,cluster_cols = F,color = rev(heat.colors(101)),angle_col = 45,cellheight = 7, cellwidth = 7, silent = T,fontsize_col = 6.5,fontsize_row = 6.5,legend = F)$gtable)
 }
 
 
@@ -102,7 +102,7 @@ lgd = Legend(col_fun = colorRamp2(seq(0,1, length.out = 101), rev(heat.colors(10
 Leg4C <- ggdraw(grid.grabExpr(draw(lgd)))
 
 design <- c(area(1,2,7,10), area(1,11,5,11))
-SupFig13 <- SupFig13B + Leg4C + plot_layout(design = design)
+SupFig11 <- SupFig11B + Leg4C + plot_layout(design = design)
 
-ggsave(filename = "../FinalFigure/SupFig13.pdf", SupFig13, width = 7, height = 5)
-ggsave(filename = "../FinalFigure/SupFig13.png", SupFig13, width = 7, height = 5)
+ggsave(filename = "../FinalFigure/SupFig11.pdf", SupFig11, width = 7, height = 5)
+ggsave(filename = "../FinalFigure/SupFig11.png", SupFig11, width = 7, height = 5)

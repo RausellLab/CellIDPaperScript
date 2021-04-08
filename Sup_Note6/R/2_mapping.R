@@ -130,5 +130,11 @@ ATACBenchOverall <- ATACBenchCell %>%  inner_join(df, by = c("data","cell_type")
 ATACBenchOverall <- ATACBenchCell %>%  inner_join(df, by = c("data","cell_type"))   %>%  group_by(methods, data, metrics) %>% summarise(value = mean(value)) %>%    select(data, everything()) %>% ungroup %>%   mutate(metrics = factor(metrics, levels = c("Precision", "Recall", "F1"))) %>%  mutate(value = round(value, digits =3)) %>%
   mutate(methods = factor(methods, c("CellID(G)", "CellID(C)", "scmap_cluster", "scmap_cell", "Seurat", "MNN", "SCN", "scPred", "CHETAH", "CaSTLe", "scID", "SingleR")))
 
+Bench1 <- ATACBenchCell %>% mutate(value = round(value, digits =3)) %>%   spread(methods, value) %>%  rename(`Reference Data` = data)
+Bench2 <- ATACBenchOverall %>% mutate(value = round(value, digits =3)) %>%   spread(methods, value) %>%  rename(`Reference Data` = data)
+xlsx::write.xlsx(Bench1, file = "../FinalTable/SupTable5.xlsx", sheetName = "Cell_Population", append = T)
+xlsx::write.xlsx(Bench2, file = "../FinalTable/SupTable5.xlsx", sheetName = "Overall", append = T)
+
+
 write_rds(ATACBenchOverall, "data/ATACBenchOverall.rds")
 write_rds(ATACBenchCell, "data/ATACBenchCell.rds")

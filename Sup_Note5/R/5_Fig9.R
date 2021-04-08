@@ -60,7 +60,7 @@ A <- ggpubr::ggarrange(plotlist = ggFletcher, nrow = 2, ncol = 3, labels = "A", 
 B <- ggpubr::ggarrange(plotlist = ggWu, nrow = 2, ncol = 3, labels = "B", font.label = list(size = 16))
 void <- ggplot() + geom_blank() + theme_void()
 
-SupFig11 <- (A/void/B/ggleg) +plot_layout(ncol = 1, heights = c(1,0.1,1,0.2))
+SupFig9 <- (A/void/B/ggleg) +plot_layout(ncol = 1, heights = c(1,0.1,1,0.2))
 
-ggsave("../FinalFigure/SupFig11.pdf", SupFig11, dpi = 320, units = "mm", width = 180, height = 210)
-ggsave("../FinalFigure/SupFig11.png", SupFig11, dpi = 320, units = "mm", width = 180, height = 210)
+ggsave("../FinalFigure/SupFig9.pdf", SupFig9, dpi = 320, units = "mm", width = 180, height = 210)
+ggsave("../FinalFigure/SupFig9.png", SupFig9, dpi = 320, units = "mm", width = 180, height = 210)
