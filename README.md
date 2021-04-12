@@ -1,6 +1,6 @@
 # CellIDPaperScript
 
-This is the repository to reproduce the figures for Cell-ID manuscript. To download Cell-ID please refer to https://github.com/RausellLab/CelliD or https://bioconductor.org/packages/devel/bioc/html/CelliD.html. The CellID legacy branch on github was used for manuscript results, small difference can occur due to dependencies package versionning and system.  All data are downloaded through code.
+This is the repository to reproduce the figures for Cell-ID manuscript. To download Cell-ID please refer to https://github.com/RausellLab/CelliD. The CellID legacy branch on github was used for manuscript results.  All data are downloaded through code.
 
 ### SupNote2 Consistency of MCA low-dimensional representation of cells and genes
 
